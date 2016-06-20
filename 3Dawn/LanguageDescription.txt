@@ -1,0 +1,87 @@
+["class" Classname]|["object" ObjectName]"{"
+	["include" ObjectName[","ObjectName]*]?
+	[Statement]*
+"}"
+
+Statement:
+	Variablename "=" Expression
+	"object" ObjectName "{" Statement "}"
+	"print(" Expression ")"
+	"while(" BooleanExpression "){" Statement "}"
+	"loop(" NumericExpression "){" Statement "}"
+	"if(" BooleanExpression "){" Statement "}" 
+		["elseif(" BooleanExpression "){" Statement "}"]*
+		["else(" BooleanExpression "){" Statement "}"]?
+	ObjectName"."ObjectAction
+	[Statement]*
+
+Expression:
+	[BooleanExpression|NumericExpression|Objectname]
+
+BooleanExpression:
+	BooleanExpression [BooleanOperator BooleanExpression]*
+	Number NumericComperator Number
+	Bool
+	
+NumericExpression:
+	Number [NumericOperator Number]*
+		
+ObjectAction:
+	"addVertices(" Number "," Number "," Number ["," Number "," Number "," Number]* ")" 
+	"translate(" Number "," Number "," Number ")"
+	"rotate(" Number "," Number "," Number ")"
+	"scale(" Number "," Number "," Number ")"
+	"color(" Number "," Number "," Number ")"
+	"fill(" Bool ")"
+	
+Variablename:
+	[a-z A-Z][a-z A-Z 0-9]*
+
+BooleanOperator:
+	[& && | || ^ ==]
+
+NumericOperator:
+	[+ - * /]
+	
+NumericComperator:
+	[< <= > >=]
+	
+Number:
+	[-]? [0-9]+ ["."[0-9]+]?
+
+Bool:
+	["true" "false"]
+	
+	
+	
+Example for a Triangle:
+object triangle{
+	triangle.addVertices(0,0,0, 1,0,0, 0,1,0)
+}
+
+Example to create a Rectangle:
+object rectangle{
+	include triangle
+	triangle1 = triangle
+	triangle2 = triangle
+	triangle2.rotate(0,0,180)
+	triangle2.translate(1,1,0)
+}
+
+Example to create a Bloack:
+object block{
+	include rectangle
+	front = rectangle
+	back = rectangle
+	back.translate(0,0,1)
+	left = rectangle
+	left.rotate(0,270,0)
+	right = rectangle
+	right.translate(1,0,0)
+	right.rotate(0,270,0)
+	top = rectangle
+	top.rotate(90,0,0)
+	top.translate(0,0,1)
+	bot = rectangle
+	bot.rotate(90,0,0)
+}
