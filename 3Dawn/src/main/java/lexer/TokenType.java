@@ -19,8 +19,8 @@ public enum TokenType {
 	ClosingParathesis("[)]"),OpeningParathesis("[(]"),
 	TrueKeyword("true"),FalseKeyword("false"),
 	EqualsOperator("="),EqualsComperator("=="),
-	Identifier(""),
-	Integer("-?[0-9]+"),Whitespace("[ \t\f\r\n]+"),
+	Identifier("[a-zA-Z][\\w]+"),
+	Number("-?[0-9]+"),Whitespace("[ \t\f\r\n]+"),
 	Conjunction("&"),Disjunction("[|]{1,2}"),XORKeyword("[\\^]"),
 	Addition("+"),Substraction("-"),Division("/"),Multiplication("*"),
 	LessEqualsComperator("<="),LessComperator("<"),
@@ -29,7 +29,8 @@ public enum TokenType {
 //	BooleanOperation("[\\^]"),
 //	BooleanOperation1("[&|\\^]"),	BooleanOperation2("[&]{2}|[|]{2}"),
 	BooleanInverter("!"), 
-	LiteralComperator("([><][=]?)|[=][=]");
+	LiteralComperator("([><][=]?)|[=][=]"),
+	Point(".");
  
 	private String symbol;
 	private TokenType(String symbol){

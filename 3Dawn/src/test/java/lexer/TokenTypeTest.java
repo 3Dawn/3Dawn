@@ -48,10 +48,10 @@ public class TokenTypeTest extends TestCase{
 		assertTrue("elseif".matches(TokenType.ElseIfKeyword.getValue()));
 		assertTrue("while".matches(TokenType.WhileKeyword.getValue()));
 		
-		assertTrue("23891273981729".matches(TokenType.Integer.getValue()));
-		assertTrue("-23891273981729".matches(TokenType.Integer.getValue()));	
-		assertFalse("--23891273981729".matches(TokenType.Integer.getValue()));	
-		assertFalse("2389127.3981729".matches(TokenType.Integer.getValue()));
+		assertTrue("23891273981729".matches(TokenType.Number.getValue()));
+		assertTrue("-23891273981729".matches(TokenType.Number.getValue()));	
+		assertFalse("--23891273981729".matches(TokenType.Number.getValue()));	
+		assertFalse("2389127.3981729".matches(TokenType.Number.getValue()));
 		
 //		assertTrue("&".matches(TokenType.BooleanOperation.getValue())); 
 //		assertTrue("&&".matches(TokenType.BooleanOperation.getValue()));

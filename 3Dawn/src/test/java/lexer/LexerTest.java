@@ -28,6 +28,24 @@ public class LexerTest extends TestCase{
 		assertTrue(lexer.getTokens().get(2).getValue().equals(TokenType.OpeningBrace.getValue()));
 		assertTrue(lexer.getVariableOccurances().get(0).equals("test"));
 		
+		lexer = new Lexer("variable2");
+		assertTrue(lexer.getTokens().get(0).getValue().equals(TokenType.Identifier.getValue()));
+		assertTrue(lexer.getVariableOccurances().get(0).equals("variable2"));
+		
+		lexer = new Lexer("variable2 = 2");
+		assertTrue(lexer.getTokens().get(0).getValue().equals(TokenType.Identifier.getValue()));
+		assertTrue(lexer.getTokens().get(1).getValue().equals(TokenType.EqualsOperator.getValue()));
+		assertTrue(lexer.getTokens().get(2).getValue().equals(TokenType.Number.getValue()));
+		assertTrue(lexer.getVariableOccurances().get(0).equals("variable2"));
+		assertTrue(lexer.getNumberOccurances().get(0) == 2);
+		
+		lexer = new Lexer("variable2 = variable1");
+		assertTrue(lexer.getTokens().get(0).getValue().equals(TokenType.Identifier.getValue()));
+		assertTrue(lexer.getTokens().get(1).getValue().equals(TokenType.EqualsOperator.getValue()));
+		assertTrue(lexer.getTokens().get(2).getValue().equals(TokenType.Identifier.getValue()));
+		assertTrue(lexer.getVariableOccurances().get(0).equals("variable2"));
+		assertTrue(lexer.getVariableOccurances().get(1).equals("variable1"));
+		
 		lexer = new Lexer("true&false|^");
 		assertTrue(lexer.getTokens().get(0).getValue().equals(TokenType.TrueKeyword.getValue()));
 		assertTrue(lexer.getTokens().get(1).getValue().equals(TokenType.Conjunction.getValue()));

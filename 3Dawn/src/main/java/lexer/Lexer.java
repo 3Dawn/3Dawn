@@ -1,11 +1,14 @@
 package lexer;
 
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Lexer {
 
 	LinkedList<TokenType> tokens = new LinkedList<TokenType>();
 	LinkedList<String> variableOccurance = new LinkedList<String>();
+	LinkedList<Float> numberOccurance = new LinkedList<Float>();
 	
 	public Lexer(String input){
 		// removes all comments
@@ -18,8 +21,7 @@ public class Lexer {
 			String line = lines[i];
 			while(line.length() != 0){
 
-				System.out.println(line);
-				// if
+			// if
 			if(line.matches(TokenType.IfKeyword.getValue()+TokenType.OpeningParathesis.getValue()+"($|.*)")){
 				tokens.add(TokenType.IfKeyword);tokens.add(TokenType.OpeningParathesis);
 				line=line.substring(3, line.length());
@@ -144,6 +146,12 @@ public class Lexer {
 				tokens.add(TokenType.EqualsOperator);
 				line=line.substring(1, line.length());
 			}
+			
+			// point
+			else if(line.startsWith(".")){
+					tokens.add(TokenType.Point);
+					line=line.substring(1, line.length());
+				}	
 
 			// class
 			else if(line.matches(TokenType.ClassKeyword.getValue()+"[\\w]+[{].*")){
@@ -155,16 +163,55 @@ public class Lexer {
 				}	
 			// object
 			else if(line.matches(TokenType.ObjectKeyword.getValue()+"[\\w]+[{].*")){
-					variableOccurance.add(line.substring(6, line.indexOf("{")));
-					tokens.add(TokenType.ObjectKeyword);
-					tokens.add(TokenType.Identifier);
-					tokens.add(TokenType.OpeningBrace);
-					line=line.substring(line.indexOf("{")+1, line.length());
+				variableOccurance.add(line.substring(6, line.indexOf("{")));
+				tokens.add(TokenType.ObjectKeyword);
+				tokens.add(TokenType.Identifier);
+				tokens.add(TokenType.OpeningBrace);
+				line=line.substring(line.indexOf("{")+1, line.length());
+			}	
+			
+			// identifier
+			else if(line.matches(TokenType.Identifier.getValue()+"($|[\\W].*)")){
+				Pattern p = Pattern.compile("[\\W]");  
+				Matcher m = p.matcher(line);
+				int position = -1;
+				if (m.find()) {
+				   position = m.start();
 				}
+				String variable = "";
+				if(position == -1){
+					variable = line;
+					line="";
+				}else {
+					variable = line.substring(0, position);
+					line=line.substring(position, line.length());
+				}
+				variableOccurance.add(variable);
+				tokens.add(TokenType.Identifier);
+			}
+			
+			// number
+			else if(line.matches(TokenType.Number.getValue()+"($|[^0-9].*)")){
+				Pattern p = Pattern.compile("[^0-9]");  
+				Matcher m = p.matcher(line);
+				int position = -1;
+				if (m.find()) {
+				   position = m.start();
+				}
+				float number ;
+				if(position == -1){
+					number = Float.parseFloat(line);
+					line="";
+				}else {
+					number = Float.parseFloat(line.substring(0, position));
+					line=line.substring(position, line.length());
+				}
+				numberOccurance.add(number);
+				tokens.add(TokenType.Number);
+			}
 			else{
 				System.err.println("Lexer: Unknown tokentype: " + line);
 				System.exit(0);
-				
 			}
 			}
 		}}
@@ -176,6 +223,18 @@ public class Lexer {
 	
 	public LinkedList<String> getVariableOccurances(){
 		return variableOccurance;
+	}
+	
+	public LinkedList<Float> getNumberOccurances(){ 
+		return numberOccurance;
+	}
+	
+	public String getNextVariableOccurances(){
+		return variableOccurance.poll();
+	}
+	
+	public float getNextNumberOccurances(){ 
+		return numberOccurance.poll();
 	}
 	
 }
